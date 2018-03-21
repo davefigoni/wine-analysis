@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>AVA</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:70px; bottom:0; width:100%; }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
+	<link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+	<link rel="stylesheet" href="/resources/demos/style.css">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+	<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<script src="{{ url_for('static', filename='js/sorttable.js') }}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="/Users/davefigoni/pythonDemo/static/js/jquery-paginate.min.js"></script>
+</head>
+
+
+<header>
+	<div class="navbar-header">
+      <a class="navbar-brand" href="/">
+	  <img style="max-width:680px; max-height:55px; margin-top: -7px;" src="{{ url_for('static', filename='images/winebadges.jpg') }}">
+	  </a>
+    </div>
+		
+	<div class = "container-fluid">	
+		<a href="/wineMapAll/">
+		<img style="max-width:680px; max-height:65px; margin-top: 5px;" src="{{ url_for('static', filename='images/map_image.png') }}">
+	  </a>
+	  <a href="/winecharts/">
+		<img style="max-width:680px; max-height:65px; margin-left: 10px; margin-top: 5px;" src="{{ url_for('static', filename='images/charts.png') }}">
+		</a>
+	</div>
+</header>
+
+
+
+
+
+
+<body>
+
+
+<style>
+header {
+  background: #EAEBEA;
+}
+</style>
+
+<style>
+.mapboxgl-popup {
+    max-width: 400px;
+    font: 14px/26px 'Merriweather', Arial, Helvetica, sans-serif;
+    color: #4d0000;
+    opacity: 0.8;
+    margin-top: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.50);
+}
+</style>
+
+<style>
+.legend {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.50);
+    font: 12px/20px 'Merriweather', Helvetica, sans-serif;
+    padding: 5px;
+    position: absolute;
+    opacity: 0.8;
+    margin-top: 5px;
+    margin-left: 5px;
+    z-index: 1;
+    
+}
+
+
+
+.legend div span {
+    border-radius: 50%;
+    display: inline-block;
+    height: 10px;
+    margin-right: 5px;
+    width: 10px;
+    position: relative;
+}
+
+b {
+	font-variant: small-caps;
+}
+</style>
+
+<div id='map'></div>
+
+<div id='point-legend' class='legend'>
+	<h4>American Viticultural Area (AVA)</h4>
+	<h5>Average Points</h5>
+    <div><span style='background-color: hsl(349, 95%, 35%)'></span>90</div>
+    <div><span style='background-color: hsl(206, 96%, 42%)'></span>88</div>
+    <div><span style='background-color: hsl(69, 91%, 52%)'></span>83</div>
+ </div>
+
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiZGF2ZXlkMjEiLCJhIjoiY2pkZGZ3bXlwMDFkeDJxcnl6eXcwY2pkbyJ9.8ABtkCdCd7fMKj92nhqUww';
+var map = new mapboxgl.Map({
+    container: 'map',
+    //style: 'mapbox://styles/daveyd21/cjdxjegld02vi2sn5w56dp7t3',
+    style: 'mapbox://styles/daveyd21/cjdw7zijm3ocr2rl8dlh1hpz0',
+    center: [-120.068,37.655],
+    zoom: 5.2
+});
+
+var zoomThreshold = 1;
+
+map.on('load', function () {
+    map.addLayer({
+        'id': 'avaAllrecent',
+        'type': 'fill',
+        "source": "composite",
+        "source-layer": "avaAll-3buasf",
+      	//"source-layer": "avaAll-c7hk93",
+        "filter": [
+        	"==",
+        	"$type",
+        	"Polygon"
+      ],
+
+        "paint": {
+        "fill-color": {
+          "base": 0.5,
+          "type": "exponential",
+          "property": "avg_points",
+          "stops": [
+            [
+              83,
+      		  "hsl(69, 91%, 52%)"
+            ],
+            [
+              88,
+              "hsl(206, 96%, 42%)"
+            ],
+            [
+              90,
+              "hsl(349, 95%, 35%)"
+            ]
+          ],
+          "default": "hsl(0, 5%, 99%)"
+        },
+       'fill-outline-color': 'hsl(355, 96%, 4%)',
+    "fill-opacity": 0.39
+    }
+
+  });
+  
+    
+    var pointLegendEl = document.getElementById('point-legend');
+    map.on('zoom', function() {
+    if (map.getZoom() > zoomThreshold) {
+        pointLegendEl.style.display = 'block';
+    } else {
+        pointLegendEl.style.display = 'block';
+    }
+});
+
+    // When a click event occurs on a feature in the states layer, open a popup at the
+    // location of the click, with description HTML from its properties.
+    map.on('click', 'avaAllrecent', function (e) {
+        new mapboxgl.Popup()
+            .setLngLat(e.lngLat)
+            .setHTML('<b>AVA: </b>' + e.features[0].properties.name + 
+        	'<br><b>Counties: </b>' + e.features[0].properties.county + 
+            '<br><b>Avg Score per Bottle: </b>'+ e.features[0].properties.avg_points + 
+            '<br><b>Best Winery in AVA: </b>' + e.features[0].properties.best_winery + ' averages ' +
+            e.features[0].properties.best_winerypoints + ' points' +
+            '<br><b>Best Grape in AVA: </b>' + e.features[0].properties.best_grape + ' averages ' +
+            e.features[0].properties.best_grapepoints + ' points'
+            )
+            .addTo(map);
+    });
+
+    // Change the cursor to a pointer when the mouse is over the states layer.
+    map.on('mouseenter', 'avaAllrecent', function () {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+
+    // Change it back to a pointer when it leaves.
+    map.on('mouseleave', 'avaAllrecent', function () {
+        map.getCanvas().style.cursor = '';
+    });
+});
+</script>
+
+</body>
+</html>
