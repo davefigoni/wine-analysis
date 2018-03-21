@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+	<meta charset="utf-8">
+	<title>Dave's Wine</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
+	<link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+	<link rel="stylesheet" href="/resources/demos/style.css">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+	<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<script src="{{ url_for('static', filename='js/sorttable.js') }}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="/Users/davefigoni/pythonDemo/static/js/jquery-paginate.min.js"></script>
+	
+</head>	
+
+
+
+<header>
+	<div class="navbar-header">
+      <a class="navbar-brand" href="/">
+	  <img style="max-width:680px; max-height:55px; margin-top: -7px;" src="{{ url_for('static', filename='images/winebadges.jpg') }}">
+	  </a>
+    </div>
+		
+	<div class = "container-fluid">	
+		<a href="/wineMapAll/">
+		<img style="max-width:680px; max-height:65px; margin-left: 10px; margin-top: 5px;" src="{{ url_for('static', filename='images/map_image.png') }}">
+		</a>
+		<a href="/winecharts/">
+		<img style="max-width:680px; max-height:65px; margin-left: 10px; margin-top: 5px;" src="{{ url_for('static', filename='images/charts.png') }}">
+		</a>
+	</div>
+</header>
+
+<div class="container-fluid" id="firstdiv">
+  <p><h4><i>Wine Enthusiast Magazine</i> reviewed and scored over 45,000 wines from the U.S. 
+  I analyzed the main features of each wine from this dataset and broke it down to three main categories:
+  the Winery, the American Viticultural Area (AVA), which is the designated wine grape-growing region,
+  and the Grape Varietal. 
+</h4></p>
+</div>
+
+<style>
+#pointsscale {
+  font-family: "Merriweather";
+  font-size: 100%;
+}
+</style>
+
+<style>
+.page-navigation a {
+  margin: 0 2px;
+  display: inline-block;
+  padding: 3px 5px;
+  color: #ffffff;
+  background-color: #70b7ec;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.page-navigation a[data-selected] {
+  background-color: #3d9be0;
+}
+</style>
+
+<style>
+html {
+  font-family: "Merriweather";
+  font-size: 100%;
+  background: #333;
+  -webkit-font-smoothing: antialiased;
+}
+</style>
+
+<style>
+table.speakertable td{
+  vertical-align: top;
+  text-align: left;
+  padding: 0.5em;
+  border-bottom: 1px solid #E6E6E6;
+}
+</style>
+
+<style>
+details {
+  vertical-align: top;
+  text-align: left;
+}
+</style>
+
+<style>
+summary::-webkit-details-marker {
+    display: none;
+}
+</style>
+
+<style>
+details summary {
+  color: #82b76a;
+  cursor:pointer;
+  background: #FFF;
+  outline: none;
+  vertical-align: top;
+  text-align: left;
+</style>
+
+<style>
+details[open] summary {
+  color: #FD5353;
+</style>
+
+<style>
+dt {
+	color: #808080;
+	background-color: #e5eefc;
+	outline: 20px;
+  	padding: 3px 5px;
+  	border-radius: 10px;
+  	box-shadow: 2px 2px 3px rgba(0,0,0,.5);
+  
+}
+</style>
+
+
+<style>
+#page-wrapper {
+  width: 1000px;
+  background: #FFFFFF;
+
+}
+</style>
+
+<style>
+header {
+  background: #EAEBEA;
+}
+</style>
+
+
+<style>
+ul {
+  background: #EDE0D3;
+}
+</style>
+
+<style>
+b {
+  color: black;
+  font-variant: small-caps;
+}
+</style>
+
+
+<style>
+th {
+	padding: 0.3em;
+    border-bottom: 1px solid #d6d6d6;
+}
+</style>
+
+
+
+<style>
+td {
+  vertical-align: top;
+  text-align: left;
+  padding: 0.3em;  
+}
+</style>
+
+<style>
+#firstdiv {
+	background-color: #97aee5;
+	color: white;
+}
+</style>
+
+<style>
+#colordiv {
+	background-color: #94ba98;
+}
+</style>
+
+<style>
+h2 {
+  font-variant: small-caps;
+  font-weight: bold;
+}
+</style>
+
+<style>
+h3 {
+  font-variant: small-caps;
+  color: #577756;
+}
+</style>
+
+
+
+<style>
+div.bhoechie-tab-container{
+  z-index: 0;
+  background-color: #ffffff;
+  padding: 0 !important;
+  margin-top: 0;
+  margin-left: 15px;
+  opacity: 0.97;
+  filter: alpha(opacity=97);
+}
+div.bhoechie-tab-menu{
+  padding-right: 0;
+  padding-left: 0;
+  padding-bottom: 0;
+}
+div.bhoechie-tab-menu div.list-group{
+  margin-bottom: 0;
+}
+div.bhoechie-tab-menu div.list-group>a{
+  margin-bottom: 0;
+}
+div.bhoechie-tab-menu div.list-group>a .glyphicon,
+div.bhoechie-tab-menu div.list-group>a .fa {
+  color: #94ba98;
+}
+div.bhoechie-tab-menu div.list-group>a:first-child{
+  border-top-right-radius: 0;
+  -moz-border-top-right-radius: 0;
+}
+div.bhoechie-tab-menu div.list-group>a:last-child{
+  border-bottom-right-radius: 0;
+  -moz-border-bottom-right-radius: 0;
+}
+div.bhoechie-tab-menu div.list-group>a.active,
+div.bhoechie-tab-menu div.list-group>a.active .glyphicon,
+div.bhoechie-tab-menu div.list-group>a.active .fa{
+  background-color: #94ba98;
+  background-image: #94ba98;
+  color: #ffffff;
+}
+div.bhoechie-tab-menu div.list-group>a.active:after{
+  content: '';
+  position: absolute;
+  top: 0;
+  margin-top: 0;
+  border-left: 0;
+  border-bottom: 13px;
+  border-top: 13px;
+  border-radius: 5px;
+  box-shadow: 2px 6px 6px rgba(0,0,0,.5);
+}
+
+div.bhoechie-tab-content{
+  background-color: #ffffff;
+  /* border: 1px solid #eeeeee; */
+  padding-left: 0px;
+  padding-top: 0px;
+}
+
+div.bhoechie-tab div.bhoechie-tab-content:not(.active){
+  display: none;
+}
+</style>
+
+
+<script>
+$(document).ready(function() {
+    $("div.bhoechie-tab-menu>div.list-group>a").click(function(e) {
+        e.preventDefault();
+        $(this).siblings('a.active').removeClass("active");
+        $(this).addClass("active");
+        var index = $(this).index();
+        $("div.bhoechie-tab>div.bhoechie-tab-content").removeClass("active");
+        $("div.bhoechie-tab>div.bhoechie-tab-content").eq(index).addClass("active");
+    });
+});
+</script>
+
+
+
+<div class="row">
+        <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 bhoechie-tab-container">  
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 bhoechie-tab-menu">
+              <div class="list-group">
+                <a href="#" class="list-group-item active text-center"><h4>Winery</h4>
+                </a>
+                <a href="#" class="list-group-item text-center"><h4>AVA</h4>
+                </a>
+                <a href="#" class="list-group-item text-center"><h4>Grape</h4>
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-17 col-md-11 col-sm-11 col-xs-11 bhoechie-tab">
+            
+<div align="right" style="width:100%">     
+ <input type="text" id="search" placeholder="Type to search" aria-label="Right Align" style="margin-top: 5px; margin-bottom: 5px; margin-right: 5px">   
+</div>
+
+<div id="pointsscale" align="right" style="width:100%">
+	<dl>
+	  <dd><b><h4>Wine Scores</h4></b></dd>
+	  <dd><b>95 to 100 = &starf;&starf;&starf;&starf;&starf;</b></dd>
+	  <dd><b>91 to 94  = &starf;&starf;&starf;&starf;&star;</b></dd>
+	  <dd><b>87 to 90  = &starf;&starf;&starf;&star;&star;</b></dd>
+	  <dd><b>83 to 86  = &starf;&starf;&star;&star;&star;</b></dd>
+	  <dd><b> 0 to 82  = &starf;&star;&star;&star;&star;</b></dd>
+	</dl>
+</div>
+<!-- Winery --> 
+
+   <div class="bhoechie-tab-content active">
+   
+   <div align="center" style="width:100%">
+    <h2>US Wineries</h2>
+  </div>
+
+<table class= "sortable" id= "myTable">
+<thead>
+
+    <th>Winery</th>
+    <th>Average Score per Bottle</th>
+    <th>Best Score per Bottle</th>
+    <th>Worst Score per Bottle</th>
+
+ </thead>
+ 
+<tbody>
+ {% for item, key in allWine|groupby('Winery') %} 
+ <tr>
+    <td>{{ item }}</td>
+    <td>{{ key|map(attribute='Avg Bottle Score for Winery')|first }}</td>
+    <td>{{ key|map(attribute='Best Bottle Score for Winery')|first }}</td>
+    <td>{{ key|map(attribute='Worst Bottle Score for Winery')|first }}</td>
+    <td><details><summary><em>Bottle Info</em></summary>
+
+{% for person in key|sort(attribute='Points',reverse=True) %}
+<dl>
+	<dt><b>Points</b>: &nbsp{{ person.Points  }}
+    {% if person.Rating == 'Outstanding' %} &starf;&starf;&starf;&starf;&starf;
+    {% elif person.Rating == 'Very Good' %} &starf;&starf;&starf;&starf;&star;
+    {% elif person.Rating == 'Good' %} &starf;&starf;&starf;&star;&star;
+    {% elif person.Rating == 'OK' %} &starf;&starf;&star;&star;&star;
+    {% elif person.Rating == 'Poor' %} &starf;&star;&star;&star;&star;{% endif %}</dt>
+	<dt><b>Winery</b>: &nbsp{{ person.Winery }}</dt>
+	<dt><b>Grape</b>: &nbsp{{ person.Grape }}</dt>
+    <dt><b>AVA</b>: &nbsp{{ person.Appellation }}</dt>
+    <dt><b>State</b>: &nbsp{{ person.State }}</dt>
+    <dt><b>Price</b>: &nbsp{% if person.Price == 0 %} Unavailable {% endif %}
+    {% if person.Price != 0 %} ${{ person.Price }} {% endif %}</dt>
+</dl>
+{% endfor %}
+</details>
+
+{% endfor %}
+</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+
+
+ <!-- Appellation -->
+<div class="bhoechie-tab-content">
+<div align="center" style="width:100%">
+    <h2>American Viticultural Area (AVA)</h2>
+</div>
+ <table class="sortable" id="myTable">
+
+  <thead>
+
+    <th>AVA</th>
+    <th>Average Score per Bottle</th>
+    <th>Best Score per Bottle</th>
+    <th>Worst Score per Bottle</th>
+
+  </thead>
+  
+<tbody>
+ {% for item, key in allWine|groupby('Appellation') %}
+ <tr>
+    <td>{{ item }}</td>
+    <td>{{ key|map(attribute='Avg Bottle Score for Appellation')|first }}</td>
+    <td>{{ key|map(attribute='Best Bottle Score for Appellation')|first }}</td>
+    <td>{{ key|map(attribute='Worst Bottle Score for Appellation')|first }}</td>
+	<td><details><summary><em>Bottle Info</em></summary>
+
+{% for person in key|sort(attribute='Points',reverse=True) %}
+<dl>
+	<dt><b>Points</b>: &nbsp{{ person.Points }}
+	{% if person.Rating == 'Outstanding' %} &starf;&starf;&starf;&starf;&starf;
+    {% elif person.Rating == 'Very Good' %} &starf;&starf;&starf;&starf;&star;
+    {% elif person.Rating == 'Good' %} &starf;&starf;&starf;&star;&star;
+    {% elif person.Rating == 'OK' %} &starf;&starf;&star;&star;&star;
+    {% elif person.Rating == 'Poor' %} &starf;&star;&star;&star;&star;{% endif %}</dt>
+	<dt><b>Winery</b>: &nbsp{{ person.Winery }}</dt>
+	<dt><b>Grape</b>: &nbsp{{ person.Grape }}</dt>
+    <dt><b>AVA</b>: &nbsp{{ person.Appellation }}</dt>
+    <dt><b>State</b>: &nbsp{{ person.State }}</dt>
+    <dt><b>Price</b>: &nbsp{% if person.Price == 0 %} Unavailable {% endif %}
+    {% if person.Price != 0 %} ${{ person.Price }} {% endif %}</dt>
+</dl>
+
+{% endfor %}
+</details>
+
+
+{% endfor %}
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+
+<!-- Grape -->       
+   <div class="bhoechie-tab-content">
+   <div align="center" style="width:100%">
+    <h2>Grape Varietals</h2>
+   </div>
+<table class= "sortable" id= "myTable">
+
+<thead>
+
+    <th>Grape</th>
+    <th>Average Score per Bottle</th>
+    <th>Best Score per Bottle</th>
+    <th>Worst Score per Bottle</th>
+
+ </thead>
+ 
+<tbody>
+ {% for item, key in allWine|groupby('Grape') %} 
+ <tr>
+    <td>{{ item }}</td>
+    <td>{{ key|map(attribute='Avg Bottle Score for Grape')|first }}</td>
+    <td>{{ key|map(attribute='Best Bottle Score for Grape')|first }}</td>
+    <td>{{ key|map(attribute='Worst Bottle Score for Grape')|first }}</td>
+    <td><details><summary><em>Bottle Info</em></summary>
+
+{% for person in key|sort(attribute='Points',reverse=True) %}
+<dl>
+	<dt><b>Points</b>: &nbsp{{ person.Points }}
+	{% if person.Rating == 'Outstanding' %} &starf;&starf;&starf;&starf;&starf;
+    {% elif person.Rating == 'Very Good' %} &starf;&starf;&starf;&starf;&star;
+    {% elif person.Rating == 'Good' %} &starf;&starf;&starf;&star;&star;
+    {% elif person.Rating == 'OK' %} &starf;&starf;&star;&star;&star;
+    {% elif person.Rating == 'Poor' %} &starf;&star;&star;&star;&star;{% endif %}</dt>
+	<dt><b>Winery</b>: &nbsp{{ person.Winery }}</dt>
+	<dt><b>Grape</b>: &nbsp{{ person.Grape }}</dt>
+    <dt><b>AVA</b>: &nbsp{{ person.Appellation }}</dt>
+    <dt><b>State</b>: &nbsp{{ person.State }}</dt>
+    <dt><b>Price</b>: &nbsp{% if person.Price == 0 %} Unavailable {% endif %}
+    {% if person.Price != 0 %} ${{ person.Price }} {% endif %}</dt>
+</dl>
+
+{% endfor %}
+</details>
+
+{% endfor %}
+</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+
+
+
+  </div>
+</div>
+
+
+<script>
+var $rows = $('#myTable tbody tr');
+$('#search').keyup(debounce(function() {
+    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+    
+    $rows.show().filter(function() {
+        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+        return !~text.indexOf(val);
+    }).hide();
+}, 300));
+
+function debounce(func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this, args = arguments;
+		var later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
+</script>
+
+
+</html>
